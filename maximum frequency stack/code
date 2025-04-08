@@ -1,0 +1,24 @@
+from collections import defaultdict
+class FreqStack:
+    def __init__(self):
+        self.stack = []
+        self.top = None
+        self.freq = defaultdict(int)
+        self.group = defaultdict(list)
+    def push(self, val: int) -> None:
+        self.freq[val] += 1
+        freq_val = self.freq[val]
+        self.group[freq_val].append(val)
+        self.stack.append(val)
+        self.top = val
+    def pop(self) -> int:
+        max_freq = max(self.freq.values())
+        val = self.group[max_freq].pop()
+        self.freq[val] -= 1
+        if not self.group[max_freq]:
+            del self.group[max_freq]
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i] == val:
+                self.stack.pop(i)
+                break
+        return val
